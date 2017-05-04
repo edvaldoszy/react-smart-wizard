@@ -1,0 +1,17 @@
+{
+    "compilerOptions": {
+        "outFile": "./bundle.js",
+        "sourceMap": false,
+        "alwaysStrict": true,
+        "noImplicitAny": false,
+        "moduleResolution": "node",
+        "declaration": false,
+        "allowJs": true,
+        "module": "commonjs",
+        "target": "es5",
+        "jsx": "react"
+    },
+    "include": [
+        "./src/**/*"
+    ]
+}

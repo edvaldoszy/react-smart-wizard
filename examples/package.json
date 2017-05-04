@@ -1,0 +1,32 @@
+{
+  "name": "react-smart-wizard-examples",
+  "version": "1.0.0",
+  "description": "Examplos do uso do componente ReactSmartWizard",
+  "main": "index.js",
+  "scripts": {
+    "start": "webpack-dev-server --progress --colors --open",
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "keywords": [
+    "examples",
+    "react",
+    "smart",
+    "wizard"
+  ],
+  "author": "Edvaldo Szymonek <edvaldoszy@gmail.com>",
+  "license": "MIT",
+  "dependencies": {
+    "react": "^15.5.4",
+    "react-dom": "^15.5.4",
+    "react-smart-wizard": "file:../"
+  },
+  "devDependencies": {
+    "@types/react": "^15.0.23",
+    "@types/react-dom": "^15.5.0",
+    "awesome-typescript-loader": "^3.1.2",
+    "source-map-loader": "^0.2.0",
+    "typescript": "^2.2.1",
+    "webpack": "^2.3.2",
+    "webpack-dev-server": "^2.4.2"
+  }
+}

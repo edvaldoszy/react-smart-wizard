@@ -2,12 +2,12 @@
 Smart Wizard for React
 
 ## Installation
-```
+```sh
 npm install --save react-smart-wizard
 ```
 
 ## Usage
-```
+```tsx
 import ReactSmartWizard, { ReactSmartWizardStep } from "react-smart-wizard";
 
 <ReactSmartWizard

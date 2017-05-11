@@ -6,47 +6,54 @@ export type Callback = (index: number) => void;
 export interface ReactSmartWizardProps {
     selected?: number;
     cycleSteps: boolean;
-    beforeStepChange?: Callback;
-    afterStepChange?: Callback;
+    onStepChange?: Callback;
 }
 
 class ReactSmartWizard extends React.Component<ReactSmartWizardProps, any> {
 
     private cycleSteps: boolean;
-    private beforeStepChange: Callback;
-    private afterStepChange: Callback;
+    private _onStepChange: Callback;
 
-    private steps: ReactSmartWizardStep[];
+    private steps: ReactSmartWizardStep[] | any = [];
 
     constructor(props) {
         super(props);
-
-        this.cycleSteps = props.cycleSteps || false;
-        this.beforeStepChange = props.beforeStepChange || function() { return true; };
-        this.afterStepChange = props.afterStepChange || function() { return true; };
-
         this.state = {
             selected: props.selected || 0
         };
+        this.cycleSteps = props.cycleSteps || false;
+        
+        if (props.onStepChange && "function" != typeof props.onStepChange) {
+            throw new Error("Invalid onStepChange callback function");            
+        }
+        this._onStepChange = props.onStepChange;
 
-        this.test();
+        this.buildStepList(props.children);
     }
-
-    test() {
-        let self = this;
-        this.steps = React.Children.map<any>(this.props.children, (child: React.ReactChild, index: number) => {
-            let c = child as React.ReactElement<ReactSmartWizardStepProps>;
-            return (
-                <ReactSmartWizardStep 
-                    {...c.props}
-                    onFinishLoad={self.afterStepChange.bind(self, index)} />
-            );
+    
+    private buildStepList(children) {
+        this.steps = React.Children.map(children, (child: any) => {
+            if (child.type === ReactSmartWizardStep) {
+                return child;
+            }
         });
     }
+    
+    private callChildBeforeStepChange(index) {
+        let child = this.steps[this.state.selected];
+        let proto = child.type.prototype;
+        return proto.beforeStepChange.call(child);
+    }
+    
+    private onStepChange(selected) {
+        let fn = this._onStepChange;
+        if ("function" == typeof this._onStepChange) {
+            fn(selected + 1);
+        }
+    }
 
-    private _onPrevButtonClick() {
+    private onPrevButtonClick() {
         let selected = this.state.selected;
-        this.beforeStepChange(selected);
 
         if (selected < 1) {
             // não pode diminuir mais :)
@@ -56,12 +63,12 @@ class ReactSmartWizard extends React.Component<ReactSmartWizardProps, any> {
         selected--;
         this.setState({
             selected: selected
-        });
+        }, this.onStepChange.bind(this, selected));
     }
 
-    private _onNextButtonClick() {
+    private onNextButtonClick() {
         let selected = this.state.selected;
-        if (!this.beforeStepChange(selected)) {
+        if (!this.callChildBeforeStepChange(selected)) {
             return;
         }
 
@@ -78,15 +85,15 @@ class ReactSmartWizard extends React.Component<ReactSmartWizardProps, any> {
 
         this.setState({
             selected: selected
-        });
+        }, this.onStepChange.bind(this, selected));
     }
 
     public nextStep() {
-        this._onNextButtonClick();
+        this.onNextButtonClick();
     }
 
     public prevStep() {
-        this._onPrevButtonClick();
+        this.onPrevButtonClick();
     }
 
     render() {
@@ -94,8 +101,8 @@ class ReactSmartWizard extends React.Component<ReactSmartWizardProps, any> {
             <div>
                 <div>{this.steps[this.state.selected]}</div>
                 <div>
-                    <button onClick={this._onPrevButtonClick.bind(this)}>Prev</button>
-                    <button onClick={this._onNextButtonClick.bind(this)}>Next</button>
+                    <button onClick={this.onPrevButtonClick.bind(this)}>Prev</button>
+                    <button onClick={this.onNextButtonClick.bind(this)}>Next</button>
                 </div>
             </div>
         );

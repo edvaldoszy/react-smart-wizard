@@ -20,15 +20,18 @@ import ReactSmartWizard, { ReactSmartWizardStep } from "react-smart-wizard";
         // do something here after step change
     }}>
     <ReactSmartWizardStep
-        title="Step title 1">
+        title="Step title 1"
+    >
         <h1>Step 1 content</h1>
     </ReactSmartWizardStep>
     <ReactSmartWizardStep
-        title="Step title 2">
+        title="Step title 2"
+    >
         <h1>Step 2 content</h1>
     </ReactSmartWizardStep>
     <ReactSmartWizardStep
-        title="Step title 3">
+        title="Step title 3"
+    >
         <h1>Step 3 content</h1>
     </ReactSmartWizardStep>
 </ReactSmartWizard>
